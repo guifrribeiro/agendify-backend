@@ -26,10 +26,10 @@ export class AuthService {
 
     const isValidPassword = await comparePassword(password, user.password);
 
-    if (isValidPassword) {
+    if (!isValidPassword) {
       throw new Error("Credenciais inválidas!");
     }
 
-    return jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "12h" });
+    return jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1d" });
   }
 }
