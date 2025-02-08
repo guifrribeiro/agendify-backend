@@ -10,7 +10,7 @@ export class AuthController {
       res.status(201).json({ message: "usuário registrado com sucesso!" });
       return
     } catch (error) {
-      res.status(400).json({ error: error });
+      res.status(400).json({ error: error.message });
       return;
     }
   }
@@ -23,7 +23,7 @@ export class AuthController {
       res.json({ token });
       return;
     } catch (error) {
-      res.status(401).json({ error: error });
+      res.status(401).json({ error: error.message });
       return;
     }
   }
