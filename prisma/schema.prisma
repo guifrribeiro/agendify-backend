@@ -30,12 +30,11 @@ model Appointment {
   id             Int      @id @unique @default(autoincrement())
   professionalId String
   clientId       String
-  startTime      DateTime
-  endTime        DateTime
+  date           DateTime
   status         String   @default("PENDING") //pending, confirmed, completed, canceled
 
-  professional User @relation(fields: [professionalId], references: [id], name: "professional")
-  client       User @relation(fields: [clientId], references: [id], name: "client")
+  professional User @relation(fields: [professionalId], references: [id], onDelete: Cascade, name: "professional")
+  client       User @relation(fields: [clientId], references: [id], onDelete: Cascade, name: "client")
 }
 
 model Availability {
