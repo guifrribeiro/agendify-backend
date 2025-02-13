@@ -17,6 +17,16 @@ export class AuthService {
     return UserRepository.createUser(name, email, hashedPassword, role);
   }
 
+  static async update(name: string, email: string, password: string, role: string) {
+    const user = await UserRepository.findByEmail(email);
+
+    if (!user) {
+      throw new Error("Credenciais inválidas!");
+    }
+
+    return UserRepository.updateUser(name, email, password, role);
+  }
+
   static async login(email: string, password: string) {
     const user = await UserRepository.findByEmail(email);
 

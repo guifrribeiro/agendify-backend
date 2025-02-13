@@ -10,4 +10,11 @@ export class UserRepository {
       data: { name, email, password, role }
     });
   }
+
+  static async updateUser(name: string, email: string, password: string, role: string) {
+    return await prisma.user.update({
+      data: { name, password, role },
+      where: { email }
+    });
+  }
 }
