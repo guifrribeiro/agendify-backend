@@ -9,7 +9,8 @@ export function ensureAuthenticated(request: Request, reponse: Response, next: N
   const authToken = request.headers.authorization;
 
   if (!authToken) {
-    return response.status(401).end({ error: "Token não fornecido "});
+    response.status(401).end({ error: "Token não fornecido "});
+    return;
   }
 
   const [, token] = authToken.split(" ");
@@ -20,6 +21,7 @@ export function ensureAuthenticated(request: Request, reponse: Response, next: N
 
     return next();
   } catch (error) {
-    return response.status(401).end({ error: "Token não fornecido "});
+    response.status(401).end({ error: "Token não fornecido "});
+    return;
   }
 }
