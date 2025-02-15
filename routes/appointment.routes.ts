@@ -7,5 +7,6 @@ const appointmentRoutes = Router();
 
 appointmentRoutes.post("/", ensureAuthenticated, ensureRole("client"), AppointmentController.create);
 appointmentRoutes.get("/", ensureAuthenticated, AppointmentController.listAppointments);
+appointmentRoutes.put("/cancel/:appointmentId", ensureAuthenticated, AppointmentController.cancelAppointment);
 
 export { appointmentRoutes };
