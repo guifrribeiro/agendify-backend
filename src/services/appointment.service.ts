@@ -15,11 +15,15 @@ export class AppointmentService {
     return await AppointmentRepository.listAppointmentsForUser(userId);
   }
 
-  static async cancelAppointment(appointmentId: number) {
+  static async cancelAppointment(appointmentId: number, userId: string, userRole: string) {
     const appointment = await AppointmentRepository.findById(appointmentId);
 
     if (!appointment) {
       throw new Error("Appointment not found");
+    }
+
+    if ((userRole === "client" && appointment.clientId !== userId) || (userRole === "professional" && appointment.professionalId !== userId)) {
+      throw new Error("You don't have permission to cancel this appointment");
     }
 
     const limitDateCancel = new Date(appointment.date);

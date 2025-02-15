@@ -1,8 +1,21 @@
 import { Request, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
+import Joi from "joi";
+
+const createAppointmentSchema = Joi.object({
+  professionalId: Joi.string().required(),
+  date: Joi.date().required(),
+});
 
 export class AppointmentController {
   static async create(request: Request, response: Response) {
+    const { error } = createAppointmentSchema.validate(request.body);
+    
+    if (error) {
+      response.status(400).json({ error: error.details[0].message });
+      return;
+    }
+
     try {
       const { professionalId, date } = request.body;
 
@@ -41,7 +54,7 @@ export class AppointmentController {
         return;
       }
 
-      await AppointmentService.cancelAppointment(parseInt(appointmentId));
+      await AppointmentService.cancelAppointment(parseInt(appointmentId), request.user_id, request.user_role);
 
       response.status(200).json({ message: "Appointment canceled" });
       return;
