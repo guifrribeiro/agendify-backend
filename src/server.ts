@@ -4,11 +4,13 @@ import dotenv from "dotenv";
 import { authRoutes } from "../routes/auth.routes";
 import { prisma } from "./prisma";
 import { appointmentRoutes } from "../routes/appointment.routes";
+import helmet from "helmet";
 
 dotenv.config();
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
