@@ -5,10 +5,8 @@ export class UserRepository {
     return await prisma.user.findUnique({ where: { email } });
   }
 
-  static async createUser(name: string, email: string, password: string, role: string) {
-    return await prisma.user.create({
-      data: { name, email, password, role }
-    });
+  static async createUser(data: { name: string, email: string, password: string, role: string }) {
+    return await prisma.user.create({ data });
   }
 
   static async updateUser(name: string, email: string, password: string, role: string) {
