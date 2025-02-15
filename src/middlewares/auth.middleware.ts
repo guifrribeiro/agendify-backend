@@ -1,27 +1,27 @@
 import { NextFunction, Request, response, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
 
-interface IPayload {
-  sub: string;
-}
+const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 
 export function ensureAuthenticated(request: Request, reponse: Response, next: NextFunction) {
   const authToken = request.headers.authorization;
-
+  
   if (!authToken) {
-    response.status(401).end({ error: "Token não fornecido "});
+    response.status(401).end(JSON.stringify({ error: "Token não fornecido "}));
     return;
   }
 
   const [, token] = authToken.split(" ");
 
   try {
-    const { sub } = verify(token, "7d939c306a1c22d7eaccab5ad1be6fcf") as IPayload;
-    request.user_id = sub;
+    const decoded = verify(token, JWT_SECRET) as JwtPayload;
 
-    return next();
+    request.user_id = decoded.sub;
+
+    next();
   } catch (error) {
-    response.status(401).end({ error: "Token não fornecido "});
+    console.log("ERRO: ", error.message);
+    response.status(401).end(JSON.stringify({ message: "Token inválido"}));
     return;
   }
 }

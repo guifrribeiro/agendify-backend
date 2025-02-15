@@ -40,6 +40,11 @@ export class AuthService {
       throw new Error("Credenciais inválidas!");
     }
 
-    return jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1d" });
+    return jwt.sign({
+      email: user.email
+    }, JWT_SECRET, {
+      subject: user.id,
+      expiresIn: "1d"
+    });
   }
 }
