@@ -19,4 +19,15 @@ export class AppointmentRepository {
       orderBy: { date: "asc" },
     });
   }
+
+  static async findById(appointmentId: number) {
+    return prisma.appointment.findFirst({ where: { id: appointmentId } });
+  }
+
+  static async updateStatusAppointment(appointmentId: number, status: string) {
+    return prisma.appointment.update({
+      where: { id: appointmentId },
+      data: { status: status },
+    })
+  }
 }
