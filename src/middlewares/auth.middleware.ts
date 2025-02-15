@@ -1,9 +1,9 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 
-export function ensureAuthenticated(request: Request, reponse: Response, next: NextFunction) {
+export function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
   const authToken = request.headers.authorization;
   
   if (!authToken) {
@@ -17,6 +17,7 @@ export function ensureAuthenticated(request: Request, reponse: Response, next: N
     const decoded = verify(token, JWT_SECRET) as JwtPayload;
 
     request.user_id = decoded.sub;
+    request.user_role = decoded.role;
 
     next();
   } catch (error) {

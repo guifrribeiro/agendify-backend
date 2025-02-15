@@ -41,7 +41,8 @@ export class AuthService {
     }
 
     return jwt.sign({
-      email: user.email
+      email: user.email,
+      role: user.role
     }, JWT_SECRET, {
       subject: user.id,
       expiresIn: "1d"
