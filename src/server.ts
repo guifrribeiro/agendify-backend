@@ -5,6 +5,7 @@ import { authRoutes } from "../routes/auth.routes";
 import { prisma } from "./prisma";
 import { appointmentRoutes } from "../routes/appointment.routes";
 import helmet from "helmet";
+import "./consumers/appointment.consumer";
 
 dotenv.config();
 

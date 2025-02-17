@@ -1,5 +1,6 @@
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { deleteCache, getCache, setCache } from "../utils/cache";
+import { sendMessage } from "../utils/messaging";
 
 export class AppointmentService {
   static async create(clientId: string, professionalId: string, date: Date) {
@@ -9,7 +10,10 @@ export class AppointmentService {
       throw new Error("Appointment already exists for this professional on this date");
     }
 
-    return await AppointmentRepository.createAppointment(clientId, professionalId, date);
+    const appointment = await AppointmentRepository.createAppointment(clientId, professionalId, date);
+    await sendMessage("appointment_created", JSON.stringify(appointment));
+
+    return appointment;
   }
 
   static async listAppointmentsForUser(userId: string, page: number = 1, limit: number = 10) {
@@ -48,6 +52,7 @@ export class AppointmentService {
 
     const updatedAppointment = await AppointmentRepository.updateStatusAppointment(appointmentId, "canceled");
     deleteCache(`aaappointments_${userId}_*`);
+    await sendMessage("appointment_canceled", JSON.stringify(updatedAppointment));
 
     return updatedAppointment;
   }

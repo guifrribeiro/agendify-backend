@@ -21,7 +21,6 @@ export function ensureAuthenticated(request: Request, response: Response, next: 
 
     next();
   } catch (error) {
-    console.log("ERRO: ", error.message);
     response.status(401).end(JSON.stringify({ message: "Token inválido"}));
     return;
   }
