@@ -35,6 +35,10 @@ model Appointment {
 
   professional User @relation(fields: [professionalId], references: [id], onDelete: Cascade, name: "professional")
   client       User @relation(fields: [clientId], references: [id], onDelete: Cascade, name: "client")
+
+  @@index([clientId])
+  @@index([professionalId])
+  @@index([date])
 }
 
 model Availability {
