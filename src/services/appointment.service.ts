@@ -11,8 +11,9 @@ export class AppointmentService {
     return await AppointmentRepository.createAppointment(clientId, professionalId, date);
   }
 
-  static async listAppointmentsForUser(userId: string) {
-    return await AppointmentRepository.listAppointmentsForUser(userId);
+  static async listAppointmentsForUser(userId: string, page: number = 1, limit: number = 10) {
+    const offset = (page - 1) * limit;
+    return await AppointmentRepository.listAppointmentsForUser(userId, limit, offset);
   }
 
   static async cancelAppointment(appointmentId: number, userId: string, userRole: string) {

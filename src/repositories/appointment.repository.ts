@@ -11,12 +11,14 @@ export class AppointmentRepository {
     return prisma.appointment.findFirst({ where: { date, professionalId } });
   }
 
-  static async listAppointmentsForUser(userId: string) {
+  static async listAppointmentsForUser(userId: string, limit: number, offset: number) {
     return prisma.appointment.findMany({
       where: {
         OR: [{ clientId: userId }, { professionalId: userId }],
       },
       orderBy: { date: "asc" },
+      take: limit,
+      skip: offset,
     });
   }
 
