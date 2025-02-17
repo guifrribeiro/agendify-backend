@@ -1,4 +1,5 @@
 import { AppointmentRepository } from "../repositories/appointment.repository";
+import { getCache, setCache } from "../utils/cache";
 
 export class AppointmentService {
   static async create(clientId: string, professionalId: string, date: Date) {
@@ -12,8 +13,19 @@ export class AppointmentService {
   }
 
   static async listAppointmentsForUser(userId: string, page: number = 1, limit: number = 10) {
+    const cacheKey = `appointments_${userId}_${page}_${limit}`;
+    const cachedAppointments = getCache(cacheKey);
+
+    if (cachedAppointments) {
+      return cachedAppointments;
+    }
+    
     const offset = (page - 1) * limit;
-    return await AppointmentRepository.listAppointmentsForUser(userId, limit, offset);
+    const appointments = await AppointmentRepository.listAppointmentsForUser(userId, limit, offset);
+
+    setCache(cacheKey, appointments);
+
+    return appointments;
   }
 
   static async cancelAppointment(appointmentId: number, userId: string, userRole: string) {
