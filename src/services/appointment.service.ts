@@ -1,5 +1,5 @@
 import { AppointmentRepository } from "../repositories/appointment.repository";
-import { getCache, setCache } from "../utils/cache";
+import { deleteCache, getCache, setCache } from "../utils/cache";
 
 export class AppointmentService {
   static async create(clientId: string, professionalId: string, date: Date) {
@@ -46,6 +46,9 @@ export class AppointmentService {
       throw new Error("You can't cancel an appointment with less than 2 hours before it starts");
     }
 
-    return await AppointmentRepository.updateStatusAppointment(appointmentId, "canceled");
+    const updatedAppointment = await AppointmentRepository.updateStatusAppointment(appointmentId, "canceled");
+    deleteCache(`aaappointments_${userId}_*`);
+
+    return updatedAppointment;
   }
 }
